@@ -1,0 +1,20 @@
+# Ignore Composer files.
+/composer.lock
+/composer.phar
+/vendor/*
+
+# Ignore PHPUnit files.
+/.phpunit.cache
+/.phpunit.result.cache
+/phpunit.xml
+
+# Ignore PHPStan files.
+/phpstan.neon
+
+# Ignore test output.
+/.phplint-cache
+/.phplint.cache/*
+
+# Ignore project files.
+/Dockerfile.bak
+/html/*

@@ -1,0 +1,13 @@
+{
+    "name": "chat/socket",
+    "autoload-dev": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    },
+    "require": {
+        "swoole/library": "^5.1",
+        "swoole/ide-helper": "^5.1",
+        "swoole/assert": "^1.0"
+    }
+}

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebSocket Test</title>
+</head>
+<body>
+    <h1>WebSocket Messages</h1>
+    <div id="messages"></div>
+
+    <script>
+        const socket = new WebSocket('ws://localhost:9502');
+        const messagesDiv = document.getElementById('messages');
+
+        socket.onopen = function() {
+            console.log('Connected to the server');
+            socket.send('Hello Server');
+        };
+
+        socket.onmessage = function(event) {
+            console.log('Message from server:', event.data);
+            // Adiciona a mensagem recebida à div
+            messagesDiv.innerHTML += `<p>${event.data}</p>`;
+        };
+
+        socket.onclose = function() {
+            console.log('Disconnected from server');
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+version: '3.2'
+
+services:
+  app:
+    build: .
+    platform: linux/amd64
+    links:
+      - consul
+      - mysql
+      - nacos
+      - oracle
+      - php-fpm
+      - pgsql
+      - redis
+      - wordpress
+    environment:
+      DISABLE_DEFAULT_SERVER: 1
+      GITHUB_ACTIONS: "yes"
+    ports:
+      - "80:80"
+    volumes:
+      - .:/var/www
+      - wordpress:/var/www/html
+
+  php-fpm:
+    image: php:8.2-fpm
+    volumes:
+      - .:/var/www
+
+  wordpress:
+    image: wordpress:php8.2-fpm
+    links:
+      - mysql
+    environment:
+      WORDPRESS_DB_HOST: mysql
+      WORDPRESS_DB_USER: username
+      WORDPRESS_DB_PASSWORD: password
+      WORDPRESS_DB_NAME: test
+      WORDPRESS_TABLE_PREFIX: wp_
+    volumes:
+      - type: volume
+        source: wordpress
+        target: /var/www/html
+        volume:
+          nocopy: false
+
+  mysql:
+    image: mysql:8.2
+    environment:
+      MYSQL_DATABASE: test
+      MYSQL_USER: username
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password
+
+  pgsql:
+    image: postgres:14
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_DB: test
+      POSTGRES_PASSWORD: root
+
+  oracle:
+    image: gvenzl/oracle-xe:slim
+    platform: linux/amd64
+    environment:
+      ORACLE_PASSWORD: oracle
+    ports:
+      - 1521
+
+  redis:
+    image: redis:6.2
+
+  nacos:
+    image: nacos/nacos-server
+    platform: linux/amd64
+    ports:
+      - 8848
+    environment:
+      MODE: standalone
+      PREFER_HOST_MODE: hostname
+
+  consul:
+    image: consul:1.15
+    command:
+      consul agent -dev -client=0.0.0.0
+    ports:
+      - 8500
+
+volumes:
+  wordpress:
